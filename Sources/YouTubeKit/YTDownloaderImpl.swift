@@ -56,6 +56,10 @@ struct YTDownloaderImpl {
         }
     }
     
+    func downloadURL(videoFormat: YTVideoFormat) throws -> URL {
+        try unthrottle(videoURL: videoFormat.url)
+    }
+    
     func unthrottle(videoURL: URL) throws -> URL {
         guard let queryString = videoURL.query() else {
             throw YTError.downloadError()

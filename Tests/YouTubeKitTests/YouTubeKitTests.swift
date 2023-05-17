@@ -10,7 +10,7 @@ final class YouTubeKitTests: XCTestCase {
     
     func testDownload() async throws {
         let url = URL(string: "https://www.youtube.com/watch?v=a8DM-tD9w2I")!
-        let destURL = URL(filePath: "/Users/dani/Desktop/Video.mp4")
+        let destURL = URL.temporaryDirectory.appending(component: "video.mp4")
         
         let downloader = YTDownloader()
         let video = try await downloader.video(for: url)
