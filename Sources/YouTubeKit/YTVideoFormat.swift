@@ -23,6 +23,8 @@ public struct YTVideoFormat: Equatable, Hashable, Identifiable {
 extension YTVideoFormat {
     public enum Quality: String, Equatable, Hashable, Codable {
         // TODO: More quality formats
+        /// An HD video
+        case hd2160
         /// An HD 1080p video
         case hd1080
         /// An HD 720p video
