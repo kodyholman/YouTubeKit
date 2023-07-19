@@ -1,11 +1,18 @@
 import XCTest
-@testable import YouTubeKit
+@testable import YouTubeDLKit
 
-final class YouTubeKitTests: XCTestCase {
+final class YouTubeDLKitTests: XCTestCase {
+    
     func testYTVideo() async throws {
         let url = URL(string: "https://www.youtube.com/watch?v=2TtnD4jmCDQ")!
         let video = try await YTDownloader().video(for: url)
         print(video)
+    }
+    
+    func testPlaylist() async throws {
+        let playlistID = "PLYpi_nHTms5DFaNMTDuMRC3G6tIZm1rJP"
+        let videos = try await YTDownloader().videos(playlistID: playlistID)
+        print("Found \(videos.1.count) videos for playlist named '\(videos.0.details.title)'!")
     }
     
     func testDownload() async throws {

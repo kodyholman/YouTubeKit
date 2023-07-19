@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import YoutubeKit
 
 public struct YTVideo: Equatable, Hashable {
     public var details: YTVideoDetails
@@ -14,4 +15,9 @@ public struct YTVideo: Equatable, Hashable {
     public var availableQualities: [YTVideoFormat.Quality] {
         formats.map { $0.quality }
     }
+}
+
+public struct YTPlaylist {
+    
+    public var details: Snippet.PlaylistsList
 }

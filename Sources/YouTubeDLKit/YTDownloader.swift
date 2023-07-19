@@ -19,6 +19,10 @@ public struct YTDownloader {
         try await extractor.video(for: videoURL)
     }
     
+    public func videos(playlistID: String) async throws -> (YTPlaylist, [YTVideo]) {
+        try await extractor.videos(playlistID: playlistID)
+    }
+    
     public func downloadURL(videoFormat: YTVideoFormat) async throws -> URL {
         try downloader.downloadURL(videoFormat: videoFormat)
     }

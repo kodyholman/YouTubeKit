@@ -7,8 +7,14 @@
 
 import Foundation
 import RegexBuilder
+import YoutubeKit
 
 struct YTExtractor {
+    
+    static func videoURL(for id: String) -> URL {
+        URL(string: "https://www.youtube.com/watch?v=\(id)")!
+    }
+    
     static let playerAPIURL: URL = URL(string: "https://www.youtube.com/youtubei/v1/player")!
     static let videoIDRegex: Regex = #/v=(.{11})/#
     
@@ -44,6 +50,38 @@ struct YTExtractor {
         }
     }
     
+    static func playlistURL(for id: String) -> URL {
+        URL(string: "https://www.youtube.com/playlist?list=\(id)")!
+    }
+    
+    func videos(playlistID: String, nextPageToken: String? = nil) async throws -> (YTPlaylist, [YTVideo]) {
+        
+        YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
+        
+        let request = PlaylistItemsListRequest(part: [.contentDetails, .snippet, .status], filter: .playlistID(playlistID), pageToken: nextPageToken)
+        
+        let response = try await YoutubeAPI.shared.send(request)
+        
+        var videos = [YTVideo]()
+        
+        for videoID in response.items.map({ $0.contentDetails.videoID }) {
+            videos.append(try await video(for: Self.videoURL(for: videoID)))
+        }
+        
+        let playlist: YTPlaylist
+        
+        if let nextPageToken = response.nextPageToken {
+            let nextPage = try await self.videos(playlistID: playlistID, nextPageToken: nextPageToken)
+            playlist = nextPage.0
+            videos.append(contentsOf: nextPage.1)
+        } else {
+            let playlistInfoResponse = try await YoutubeAPI.shared.send(PlaylistsListRequest(part: [.snippet, .status, .id], filter: .id(playlistID)))
+            playlist = YTPlaylist(details: playlistInfoResponse.items.first!.snippet!)
+        }
+        
+        return (playlist, videos)
+    }
+    
     func videoID(for videoURL: URL) async throws -> String {
         guard let lastComponent = videoURL.query() else {
             throw YTError.invalidURL()
@@ -76,6 +114,18 @@ struct YTExtractor {
                 throw error
             }
             throw YTError.unknown(context: YTError.Context(underlyingError: error))
+        }
+    }
+}
+
+extension YoutubeAPI {
+    
+    func send<T: Requestable>(_ request: T, queue: DispatchQueue = .main) async throws -> T.Response {
+        
+        try await withCheckedThrowingContinuation { continuation in
+            send(request, queue: queue) { result in
+                continuation.resume(with: result)
+            }
         }
     }
 }

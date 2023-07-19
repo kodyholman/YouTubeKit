@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "youtubekit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rinov/YoutubeKit.git",
+      "state" : {
+        "revision" : "152d27bd44d9ed3c5934642b19a720cc0ea831f9",
+        "version" : "0.8.0"
+      }
+    }
+  ],
+  "version" : 2
+}
