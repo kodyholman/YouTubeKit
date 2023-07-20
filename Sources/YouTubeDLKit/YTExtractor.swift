@@ -65,7 +65,11 @@ struct YTExtractor {
         var videos = [YTVideo]()
         
         for videoID in response.items.map({ $0.contentDetails.videoID }) {
-            videos.append(try await video(for: Self.videoURL(for: videoID)))
+            do {
+                videos.append(try await video(for: Self.videoURL(for: videoID)))
+            } catch {
+                print("Skipping video: \(videoID)")
+            }
         }
         
         let playlist: YTPlaylist
@@ -76,10 +80,33 @@ struct YTExtractor {
             videos.append(contentsOf: nextPage.1)
         } else {
             let playlistInfoResponse = try await YoutubeAPI.shared.send(PlaylistsListRequest(part: [.snippet, .status, .id], filter: .id(playlistID)))
-            playlist = YTPlaylist(details: playlistInfoResponse.items.first!.snippet!)
+            guard let snippet = playlistInfoResponse.items.first?.snippet else {
+                throw YTError.parsingError(context: .init(message: "Failed to get playlist information."))
+            }
+            playlist = YTPlaylist(details: snippet)
         }
         
         return (playlist, videos)
+    }
+    
+    func videos(channelID: String, nextPageToken: String? = nil) async throws -> (YTChannel, [YTVideo]) {
+        
+        YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
+        
+        let channelInfoResponse = try await YoutubeAPI.shared.send(ChannelListRequest(part: [.snippet, .id, .contentDetails, .topicDetails, .brandingSettings, .statistics], filter: .userName(channelID)))
+        
+        guard let snippet = channelInfoResponse.items.first?.snippet else {
+            throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
+        }
+        let channel = YTChannel(details: snippet)
+        
+        guard let allVideosPlaylistID = channelInfoResponse.items.first?.contentDetails?.relatedPlaylists.uploads else {
+            throw YTError.parsingError(context: .init(message: "Failed to get channel videos."))
+        }
+        
+        let videos = try await videos(playlistID: allVideosPlaylistID).1
+        
+        return (channel, videos)
     }
     
     func videoID(for videoURL: URL) async throws -> String {

@@ -23,8 +23,8 @@ public struct YTVideoFormat: Equatable, Hashable, Identifiable {
 extension YTVideoFormat {
     public enum Quality: String, Equatable, Hashable, Codable {
         // TODO: More quality formats
-        /// An HD video
         case hd2160
+        case hd1440
         /// An HD 1080p video
         case hd1080
         /// An HD 720p video
@@ -65,11 +65,11 @@ extension YTVideoFormat: Decodable {
         self.url = try container.decode(URL.self, forKey: .url)
         self.mimeType = try container.decode(YTMimeType.self, forKey: .mimeType)
         self.bitrate = try container.decode(Int.self, forKey: .bitrate)
-        self.width = try? container.decode(Int.self, forKey: .width)
-        self.height = try? container.decode(Int.self, forKey: .height)
-        self.contentLength = try? container.decode(String.self, forKey: .contentLength)
+        self.width = try container.decodeIfPresent(Int.self, forKey: .width)
+        self.height = try container.decodeIfPresent(Int.self, forKey: .height)
+        self.contentLength = try container.decodeIfPresent(String.self, forKey: .contentLength)
         self.quality = try container.decode(Quality.self, forKey: .quality)
-        self.audioQuality = try? container.decode(AudioQuality.self, forKey: .audioQuality)
-        self.fps = try? container.decode(Int.self, forKey: .fps)
+        self.audioQuality = try container.decodeIfPresent(AudioQuality.self, forKey: .audioQuality)
+        self.fps = try container.decodeIfPresent(Int.self, forKey: .fps)
     }
 }

@@ -11,8 +11,14 @@ final class YouTubeDLKitTests: XCTestCase {
     
     func testPlaylist() async throws {
         let playlistID = "PLYpi_nHTms5DFaNMTDuMRC3G6tIZm1rJP"
-        let videos = try await YTDownloader().videos(playlistID: playlistID)
-        print("Found \(videos.1.count) videos for playlist named '\(videos.0.details.title)'!")
+        let result = try await YTDownloader().videos(playlistID: playlistID)
+        print("Found \(result.1.count) videos for playlist named '\(result.0.details.title)'!")
+    }
+    
+    func testChannel() async throws {
+        let channelID = "nockonarchery"
+        let result = try await YTDownloader().videos(channelID: channelID)
+        print("Found \(result.1.count) videos for channel named '\(result.0.details.title)'!")
     }
     
     func testDownload() async throws {
