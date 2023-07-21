@@ -19,6 +19,7 @@ public struct YTVideo: Equatable, Hashable {
 
 public struct YTPlaylist {
     
+    public var playlistID: String
     public var details: Snippet.PlaylistsList
 }
 

@@ -83,7 +83,7 @@ struct YTExtractor {
             guard let snippet = playlistInfoResponse.items.first?.snippet else {
                 throw YTError.parsingError(context: .init(message: "Failed to get playlist information."))
             }
-            playlist = YTPlaylist(details: snippet)
+            playlist = YTPlaylist(playlistID: playlistID, details: snippet)
         }
         
         return (playlist, videos)
