@@ -24,5 +24,6 @@ public struct YTPlaylist {
 
 public struct YTChannel {
     
+    public var channelID: String
     public var details: Snippet.ChannelList
 }

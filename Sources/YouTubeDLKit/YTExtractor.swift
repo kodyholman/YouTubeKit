@@ -98,7 +98,7 @@ struct YTExtractor {
         guard let snippet = channelInfoResponse.items.first?.snippet else {
             throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
         }
-        let channel = YTChannel(details: snippet)
+        let channel = YTChannel(channelID: channelID, details: snippet)
         
         guard let allVideosPlaylistID = channelInfoResponse.items.first?.contentDetails?.relatedPlaylists.uploads else {
             throw YTError.parsingError(context: .init(message: "Failed to get channel videos."))
