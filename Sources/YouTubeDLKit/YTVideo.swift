@@ -17,6 +17,20 @@ public struct YTVideo {
         formats.map { $0.quality }
     }
 }
+extension YTVideo: Identifiable, Hashable {
+    
+    public static func == (lhs: YouTubeDLKit.YTVideo, rhs: YouTubeDLKit.YTVideo) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public var id: String {
+        self.details.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
 
 public struct YTPlaylist {
     
@@ -24,10 +38,38 @@ public struct YTPlaylist {
     public var details: Snippet.PlaylistsList
     public var thumbnails: Thumbnails.PlaylistsList?
 }
+extension YTPlaylist: Identifiable, Hashable {
+    
+    public static func == (lhs: YouTubeDLKit.YTPlaylist, rhs: YouTubeDLKit.YTPlaylist) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public var id: String {
+        self.playlistID
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
 
 public struct YTChannel {
     
     public var channelID: String
     public var details: Snippet.ChannelList
     public var thumbnails: Thumbnails.ChannelList?
+}
+extension YTChannel: Identifiable, Hashable {
+    
+    public static func == (lhs: YouTubeDLKit.YTChannel, rhs: YouTubeDLKit.YTChannel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public var id: String {
+        self.channelID
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
