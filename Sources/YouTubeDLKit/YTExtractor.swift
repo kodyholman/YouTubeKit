@@ -21,6 +21,13 @@ struct YTExtractor {
     func video(for videoURL: URL) async throws -> YTVideo {
         let videoID = try await videoID(for: videoURL)
         
+        YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
+        
+        let videoAPIRequest = VideoListRequest(part: [.contentDetails, .snippet], filter: .id(videoID))
+        guard let videoAPIInfo = try await YoutubeAPI.shared.send(videoAPIRequest).items.first else {
+            throw YTError.parsingError(context: .init(message: "Unable to get video info from YoutubeAPI"))
+        }
+        
         return try await throwingYTError {
             var request = URLRequest(url: Self.playerAPIURL)
             request.httpMethod = "POST"
@@ -46,7 +53,7 @@ struct YTExtractor {
             let apaptiveFormatsJSON = try JSONSerialization.data(withJSONObject: videoAdaptiveFormats)
             formats.append(contentsOf: try JSONDecoder().decode([YTVideoFormat].self, from: apaptiveFormatsJSON))
             
-            return YTVideo(details: details, formats: formats)
+            return YTVideo(details: details, formats: formats, thumbnails: videoAPIInfo.snippet?.thumbnails)
         }
     }
     
@@ -83,7 +90,7 @@ struct YTExtractor {
             guard let snippet = playlistInfoResponse.items.first?.snippet else {
                 throw YTError.parsingError(context: .init(message: "Failed to get playlist information."))
             }
-            playlist = YTPlaylist(playlistID: playlistID, details: snippet)
+            playlist = YTPlaylist(playlistID: playlistID, details: snippet, thumbnails: snippet.thumbnails)
         }
         
         return (playlist, videos)
@@ -98,7 +105,7 @@ struct YTExtractor {
         guard let snippet = channelInfoResponse.items.first?.snippet else {
             throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
         }
-        let channel = YTChannel(channelID: channelID, details: snippet)
+        let channel = YTChannel(channelID: channelID, details: snippet, thumbnails: snippet.thumbnails)
         
         guard let allVideosPlaylistID = channelInfoResponse.items.first?.contentDetails?.relatedPlaylists.uploads else {
             throw YTError.parsingError(context: .init(message: "Failed to get channel videos."))

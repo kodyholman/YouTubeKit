@@ -8,9 +8,10 @@
 import Foundation
 import YoutubeKit
 
-public struct YTVideo: Equatable, Hashable {
+public struct YTVideo {
     public var details: YTVideoDetails
     public var formats: [YTVideoFormat]
+    public var thumbnails: Thumbnails.VideoList?
     
     public var availableQualities: [YTVideoFormat.Quality] {
         formats.map { $0.quality }
@@ -21,10 +22,12 @@ public struct YTPlaylist {
     
     public var playlistID: String
     public var details: Snippet.PlaylistsList
+    public var thumbnails: Thumbnails.PlaylistsList?
 }
 
 public struct YTChannel {
     
     public var channelID: String
     public var details: Snippet.ChannelList
+    public var thumbnails: Thumbnails.ChannelList?
 }
