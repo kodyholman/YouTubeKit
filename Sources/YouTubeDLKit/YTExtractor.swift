@@ -9,7 +9,7 @@ import Foundation
 import RegexBuilder
 import YoutubeKit
 
-struct YTExtractor {
+public struct YTExtractor {
     
     static func videoURL(for id: String) -> URL {
         URL(string: "https://www.youtube.com/watch?v=\(id)")!
@@ -94,6 +94,18 @@ struct YTExtractor {
         }
         
         return (playlist, videos)
+    }
+    
+    public func channelInfo(channelID: String) async throws -> YTChannel {
+        
+        YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
+        
+        let channelInfoResponse = try await YoutubeAPI.shared.send(ChannelListRequest(part: [.snippet, .id, .contentDetails, .topicDetails, .brandingSettings, .statistics], filter: .userName(channelID)))
+        
+        guard let snippet = channelInfoResponse.items.first?.snippet else {
+            throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
+        }
+        return YTChannel(channelID: channelID, details: snippet, thumbnails: snippet.thumbnails)
     }
     
     func videos(channelID: String, nextPageToken: String? = nil) async throws -> (YTChannel, [YTVideo]) {
