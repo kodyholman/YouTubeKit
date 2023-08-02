@@ -99,11 +99,23 @@ public struct YTExtractor {
         return (playlist, videos)
     }
     
+    public static func channelInfo(userName: String) async throws -> YTChannel {
+        
+        YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
+        
+        let channelInfoResponse = try await YoutubeAPI.shared.send(ChannelListRequest(part: [.snippet, .id, .contentDetails, .topicDetails, .brandingSettings, .statistics], filter: .userName(userName)))
+        
+        guard let item = channelInfoResponse.items.first, let snippet = item.snippet else {
+            throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
+        }
+        return YTChannel(channelID: item.id, details: snippet, thumbnails: snippet.thumbnails)
+    }
+    
     public static func channelInfo(channelID: String) async throws -> YTChannel {
         
         YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
         
-        let channelInfoResponse = try await YoutubeAPI.shared.send(ChannelListRequest(part: [.snippet, .id, .contentDetails, .topicDetails, .brandingSettings, .statistics], filter: .userName(channelID)))
+        let channelInfoResponse = try await YoutubeAPI.shared.send(ChannelListRequest(part: [.snippet, .id, .contentDetails, .topicDetails, .brandingSettings, .statistics], filter: .id(channelID)))
         
         guard let snippet = channelInfoResponse.items.first?.snippet else {
             throw YTError.parsingError(context: .init(message: "Failed to get channel information."))
