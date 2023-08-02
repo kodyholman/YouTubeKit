@@ -17,7 +17,7 @@ final class YouTubeDLKitTests: XCTestCase {
     
     func testChannelInfo() async throws {
         let channelID = "nockonarchery"
-        let result = try await YTExtractor().channelInfo(channelID: channelID)
+        let result = try await YTExtractor.channelInfo(channelID: channelID)
         print("Found Channel Info for: \(result.details.title)!")
     }
     

@@ -96,7 +96,7 @@ public struct YTExtractor {
         return (playlist, videos)
     }
     
-    public func channelInfo(channelID: String) async throws -> YTChannel {
+    public static func channelInfo(channelID: String) async throws -> YTChannel {
         
         YoutubeKit.shared.setAPIKey("AIzaSyCbGMAauH9JGOClZsI_qyU_oO5UqaNkIOU")
         
