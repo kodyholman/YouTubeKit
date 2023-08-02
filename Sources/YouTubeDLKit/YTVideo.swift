@@ -10,11 +10,11 @@ import YoutubeKit
 
 public struct YTVideo {
     public var details: YTVideoDetails
-    public var formats: [YTVideoFormat]
+    public var formats: [YTVideoFormat]?
     public var thumbnails: Thumbnails.VideoList?
     
     public var availableQualities: [YTVideoFormat.Quality] {
-        formats.map { $0.quality }
+        formats?.map { $0.quality } ?? []
     }
 }
 extension YTVideo: Identifiable, Hashable {

@@ -22,7 +22,7 @@ struct YTDownloaderImpl {
     ) async throws {
         try await withCheckedThrowingContinuation { continuation in
             do {
-                guard let videoFormat = video.formats.first(where: { $0.quality == quality && $0.mimeType.subtype == fileFormat.rawValue }) else {
+                guard let videoFormat = video.formats?.first(where: { $0.quality == quality && $0.mimeType.subtype == fileFormat.rawValue }) else {
                     throw YTError.unavailableFormatAndQuality(format: fileFormat, quality: quality)
                 }
                 

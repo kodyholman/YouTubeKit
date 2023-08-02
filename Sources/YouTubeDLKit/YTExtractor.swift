@@ -38,20 +38,23 @@ public struct YTExtractor {
             
             let (responseData, _) = try await URLSession.shared.data(for: request)
             guard let responseJSON = try JSONSerialization.jsonObject(with: responseData) as? [String : Any],
-                  let videoDetails = responseJSON["videoDetails"],
-                  let videoFormats = (responseJSON["streamingData"] as? [String : Any])?["formats"],
-                  let videoAdaptiveFormats = (responseJSON["streamingData"] as? [String : Any])?["adaptiveFormats"] else {
+                  let videoDetails = responseJSON["videoDetails"] else {
                 throw YTError.parsingError()
             }
             
             let detailsJSON = try JSONSerialization.data(withJSONObject: videoDetails)
             let details = try JSONDecoder().decode(YTVideoDetails.self, from: detailsJSON)
             
-            let formatsJSON = try JSONSerialization.data(withJSONObject: videoFormats)
-            var formats = try JSONDecoder().decode([YTVideoFormat].self, from: formatsJSON)
+            var formats = [YTVideoFormat]()
             
-            let apaptiveFormatsJSON = try JSONSerialization.data(withJSONObject: videoAdaptiveFormats)
-            formats.append(contentsOf: try JSONDecoder().decode([YTVideoFormat].self, from: apaptiveFormatsJSON))
+            if let videoFormats = (responseJSON["streamingData"] as? [String : Any])?["formats"],
+               let videoAdaptiveFormats = (responseJSON["streamingData"] as? [String : Any])?["adaptiveFormats"] {
+                let formatsJSON = try JSONSerialization.data(withJSONObject: videoFormats)
+                formats = try JSONDecoder().decode([YTVideoFormat].self, from: formatsJSON)
+                
+                let apaptiveFormatsJSON = try JSONSerialization.data(withJSONObject: videoAdaptiveFormats)
+                formats.append(contentsOf: try JSONDecoder().decode([YTVideoFormat].self, from: apaptiveFormatsJSON))
+            }
             
             return YTVideo(details: details, formats: formats, thumbnails: videoAPIInfo.snippet?.thumbnails)
         }

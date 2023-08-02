@@ -10,7 +10,8 @@ final class YouTubeDLKitTests: XCTestCase {
     }
     
     func testPlaylist() async throws {
-        let playlistID = "PL0FDjkYOA0mzXhHBSc50ctEg-Z_l1ya6Q"//"PLYpi_nHTms5DFaNMTDuMRC3G6tIZm1rJP"
+        let playlistID = "PL0FDjkYOA0mzXhHBSc50ctEg-Z_l1ya6Q"
+//        let playlistID = "PLYpi_nHTms5DFaNMTDuMRC3G6tIZm1rJP"
         let result = try await YTDownloader().videos(playlistID: playlistID)
         print("Found \(result.1.count) videos for playlist named '\(result.0.details.title)'!")
     }
