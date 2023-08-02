@@ -47,7 +47,11 @@ struct YTDownloaderImpl {
                                          delegate: delegate,
                                          delegateQueue: .main)
                 
-                let unthrottledURL = try unthrottle(videoURL: videoFormat.url)
+                guard let url = videoFormat.url else {
+                    throw YTError.invalidURL(context: .init(message: "Missing URL"))
+                }
+                
+                let unthrottledURL = try unthrottle(videoURL: url)
                 let downloadTask = session.downloadTask(with: unthrottledURL)
                 downloadTask.resume()
             } catch {
@@ -57,7 +61,12 @@ struct YTDownloaderImpl {
     }
     
     func downloadURL(videoFormat: YTVideoFormat) throws -> URL {
-        try unthrottle(videoURL: videoFormat.url)
+        
+        guard let url = videoFormat.url else {
+            throw YTError.invalidURL(context: .init(message: "Missing URL"))
+        }
+        
+        return try unthrottle(videoURL: url)
     }
     
     func unthrottle(videoURL: URL) throws -> URL {

@@ -9,7 +9,7 @@ import Foundation
 
 public struct YTVideoFormat: Equatable, Hashable, Identifiable {
     public var id: Int
-    public var url: URL
+    public var url: URL?
     public var mimeType: YTMimeType
     public var bitrate: Int
     public var width: Int?
@@ -62,7 +62,7 @@ extension YTVideoFormat: Decodable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(Int.self, forKey: .itag)
-        self.url = try container.decode(URL.self, forKey: .url)
+        self.url = try container.decodeIfPresent(URL.self, forKey: .url)
         self.mimeType = try container.decode(YTMimeType.self, forKey: .mimeType)
         self.bitrate = try container.decode(Int.self, forKey: .bitrate)
         self.width = try container.decodeIfPresent(Int.self, forKey: .width)
