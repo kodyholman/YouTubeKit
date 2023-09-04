@@ -12,7 +12,9 @@ final class YouTubeDLKitTests: XCTestCase {
     func testPlaylist() async throws {
 //        let playlistID = "PL0FDjkYOA0mzXhHBSc50ctEg-Z_l1ya6Q"
 //        let playlistID = "PLYpi_nHTms5DFaNMTDuMRC3G6tIZm1rJP"
-        let playlistID = "PL1-q6Lv-ZSHIgID4ygEEzT5zLo7kBl0Or"
+//        let playlistID = "PL1-q6Lv-ZSHIgID4ygEEzT5zLo7kBl0Or"
+//        let playlistID = "PL1-q6Lv-ZSHK-Tj1o3kzDKkgXp3MzHKgy" // has private videos
+        let playlistID = "PLpJxspUK4tDgVTxXH7qzivo6UbgI71N3S"
         let result = try await YTDownloader().videos(playlistID: playlistID)
         print("Found \(result.1.count) videos for playlist named '\(result.0.details.title)'!")
     }

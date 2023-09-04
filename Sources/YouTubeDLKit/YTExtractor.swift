@@ -56,7 +56,7 @@ public struct YTExtractor {
                 formats.append(contentsOf: try JSONDecoder().decode([YTVideoFormat].self, from: apaptiveFormatsJSON))
             }
             
-            return YTVideo(details: details, formats: formats, thumbnails: videoAPIInfo.snippet?.thumbnails)
+            return YTVideo(details: details, formats: formats, thumbnails: videoAPIInfo.snippet?.thumbnails, tags: videoAPIInfo.snippet?.tags)
         }
     }
     

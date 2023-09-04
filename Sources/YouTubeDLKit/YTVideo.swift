@@ -12,6 +12,7 @@ public struct YTVideo {
     public var details: YTVideoDetails
     public var formats: [YTVideoFormat]?
     public var thumbnails: Thumbnails.VideoList?
+    public var tags: [String]?
     
     public var availableQualities: [YTVideoFormat.Quality] {
         formats?.map { $0.quality } ?? []
