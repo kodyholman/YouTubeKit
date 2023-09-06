@@ -34,9 +34,9 @@ extension Thumbnails {
 
 extension Thumbnails {
     public struct VideoList: Codable {
-        public let `default`: Default
-        public let medium: Default
-        public let high: Default
+        public let `default`: Default?
+        public let medium: Default?
+        public let high: Default?
         public let standard: Default?
         public let maxres: Default?
         
@@ -52,9 +52,9 @@ extension Thumbnails {
 
 extension Thumbnails {
     public struct ChannelList: Codable {
-        public let high: Default
-        public let `default`: Default
-        public let medium: Default
+        public let high: Default?
+        public let `default`: Default?
+        public let medium: Default?
         
         public enum CodingKeys: String, CodingKey {
             case high
@@ -102,9 +102,9 @@ extension Thumbnails {
 
 extension Thumbnails {
     public struct PlaylistItemsList: Codable {
-        public let high: Default
-        public let medium: Default
-        public let `default`: Default
+        public let high: Default?
+        public let medium: Default?
+        public let `default`: Default?
         
         public enum CodingKeys: String, CodingKey {
             case high = "high"
