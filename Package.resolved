@@ -3,10 +3,10 @@
     {
       "identity" : "youtubekit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/rinov/YoutubeKit.git",
+      "location" : "https://github.com/kodyholman/YoutubeKit.git",
       "state" : {
-        "revision" : "152d27bd44d9ed3c5934642b19a720cc0ea831f9",
-        "version" : "0.8.0"
+        "branch" : "master",
+        "revision" : "98bdefc019f7747137c9a703fb9047eebcb05613"
       }
     }
   ],

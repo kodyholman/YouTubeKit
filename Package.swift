@@ -15,7 +15,7 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
 //        .package(url: "https://github.com/b5i/YouTubeKit", from: Version("1.0.0")),
-        .package(url: "https://github.com/rinov/YoutubeKit.git", from: Version("0.8.0"))
+        .package(url: "https://github.com/kodyholman/YoutubeKit.git", branch: "master")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
