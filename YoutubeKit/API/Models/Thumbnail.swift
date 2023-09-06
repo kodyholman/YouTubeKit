@@ -84,9 +84,9 @@ extension Thumbnails {
 
 extension Thumbnails {
     public struct PlaylistsList: Codable {
-        public let high: Default
-        public let medium: Default
-        public let `default`: Default
+        public let high: Default?
+        public let medium: Default?
+        public let `default`: Default?
         public let standard: Default?
         public let maxres: Default?
         
